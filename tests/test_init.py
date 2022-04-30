@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Common tagged abilities."""
+"""Create a tagged dict."""
 
 import sys
 import pytest
@@ -32,3 +32,8 @@ class TestInit:
         t = Tagged(qwerqwer=1, bzzzz=2)
         assert 1 in t.values()
         assert frozenset("bz") in t.keys()
+
+    def test_empty(self):
+        """Non-tagged init."""
+        t = Tagged()
+        assert len(list(t.items())) == 0
