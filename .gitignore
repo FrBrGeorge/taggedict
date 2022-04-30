@@ -11,3 +11,4 @@ dist
 *.pot
 *.egg-info
 *.swp
+htmlcov/*
