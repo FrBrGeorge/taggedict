@@ -6,7 +6,7 @@ import pytest
 from tagged import Tagged
 
 
-class TestInit:
+class TestGetitem:
     """Tagged.__getitem__()."""
 
     @pytest.fixture
@@ -25,15 +25,17 @@ class TestInit:
 
     def test_start(self, example):
         """Tagged[tag:] interface."""
-        assert set(example["a":]) == {2, 3}
+        assert set(example["a":]) == {(frozenset("ad"), 2), (frozenset("qwas"), 3)}
 
     def test_stop(self, example):
-        """Tagged[:tag] interface."""
-        assert set(example[:"aw"]) == {3}
+        """Tagged[:tags] interface."""
+        assert set(example[:"aw"]) == {(frozenset("qwas"), 3)}
 
     def test_step(self, example):
-        """Tagged[::tag] interface."""
-        assert set(example[::"ar"]) == {1, 2, 3}
+        """Tagged[::tags] interface."""
+        assert set(example[::"ar"]) == {(frozenset("qwer"), 1),
+                                        (frozenset("ad"), 2),
+                                        (frozenset("qwas"), 3)}
 
     def test_unknown(self, example):
         """Unimplemented interface."""
