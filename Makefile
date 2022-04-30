@@ -8,6 +8,7 @@ check:
 coverage:
 	$(MAKE) TESTFLAGS="$(TESTFLAGS) $(COVERFLAGS)" check
 
+clean:
 
 gitclean:	clean
 	git clean -fdx

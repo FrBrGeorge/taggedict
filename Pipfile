@@ -9,6 +9,7 @@ name = "pypi"
 pytest = "*"
 pytest-cov = "*"
 build = "*"
+almost-make = "*"
 
 [requires]
 python_version = "3.10"
