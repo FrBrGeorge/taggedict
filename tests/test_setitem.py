@@ -42,3 +42,8 @@ class TestSetitem:
         example[::"aw"] = "i"
         assert example["siwaq"] == 3
         assert len(set(example["i":])) == 3
+
+    def test_unimpl(self, example):
+        """Unimplemented setitem."""
+        with pytest.raises(KeyError):
+            example[1:1:1] = 1

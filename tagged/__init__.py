@@ -69,7 +69,7 @@ class Tagged(dict):
         """
         (internal) Modify tags with setop selecting items by mode
         """
-        new = {setop(key, upd): val for key, val in self[idx] if mode(key, tags)}
+        new = {setop(key, upd): val for key, val in self[idx] if mode(key, tags)} if mode else {}
         old = [key for key, val in self[idx]]
         for key in old:
             del self[key]
@@ -77,13 +77,24 @@ class Tagged(dict):
 
     def __delitem__(self, idx):
         """
-        Delete object or tag(s).
+        Delete object(s) or tag(s).
 
         Raw indexing: convert idx to frozenset and delete an object;
         if key is not iterable, act like standard dict.
 
-        TODO
+        del Tagged[tag:] — delete tag from all objects tagged by tag
+        del Tagged[:tags] — delete tags from all objects tagged by all tags
+        del Tagged[::tags] — delete tags from objects tagged by any tag from tags
+
+        del Tagged[tag:...] — delete objects tagged by tag
+        del Tagged[...:tags] — delete objects tagged by all tags
+        del Tagged[...::tags] — delete objects tagged by any tag from tags
+        del Tagged[:...:tags] — same
         """
+        if type(idx) is slice:
+            idx = slice(idx.start if idx.start is not Ellipsis else False,
+                        idx.stop if idx.stop is not Ellipsis else False,
+                        idx.step if idx.step is not Ellipsis else False)
         match idx:
             case slice(start=start, stop=None, step=None):
                 self._moditem(idx, {start}, start, _F.__sub__, _F.__contains__)
@@ -91,6 +102,12 @@ class Tagged(dict):
                 self._moditem(idx, _F(stop), _F(stop), _F.__sub__, _F.issuperset)
             case slice(start=None, stop=None, step=step):
                 self._moditem(idx, _F(step), _F(step), _F.__sub__, _F.__and__)
+            case slice(start=start, stop=(None | False), step=(None | False)):
+                self._moditem(slice(start, None, None), {start}, _F(start), _F.__sub__, None)
+            case slice(start=(None | False), stop=stop, step=(None | False)):
+                self._moditem(slice(None, stop, None), _F(stop), _F(stop), _F.__sub__, None)
+            case slice(start=(None | False), stop=(None | False), step=step):
+                self._moditem(slice(None, None, step), _F(step), _F(step), _F.__sub__, None)
             case slice(start=_, stop=_, step=_):
                 raise KeyError(f"Complex access via {idx} not implemented")
             case _:

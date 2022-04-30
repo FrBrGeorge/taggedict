@@ -39,3 +39,23 @@ class TestDelitem:
         """del Tagged[::tag] interface."""
         del example[::"qs"]
         assert example == Tagged(ad=2, wre=1, aw=3)
+
+    def test_estart(self, example):
+        """del Tagged[tag:...] interface."""
+        del example["a":...]
+        assert len(example) == 1
+
+    def test_estop(self, example):
+        """del Tagged[...:tag]  interface."""
+        del example[...:"aq"]
+        assert len(example) == 2
+
+    def test_estep(self, example):
+        """del Tagged[...::tag] interface."""
+        del example[...::"qs"]
+        assert len(example) == 1
+
+    def test_unimpl(self, example):
+        """Unimplemented deletion."""
+        with pytest.raises(KeyError):
+            del example[...:1:1]
