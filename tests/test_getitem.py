@@ -26,3 +26,15 @@ class TestInit:
     def test_start(self, example):
         """Tagged[tag:] interface."""
         assert set(example["a":]) == {2, 3}
+
+    def test_stop(self, example):
+        """Tagged[:tag] interface."""
+        assert set(example[:"aw"]) == {3}
+
+    def test_step(self, example):
+        """Tagged[::tag] interface."""
+        assert set(example[::"ar"]) == {1, 2, 3}
+
+    def test_unknown(self, example):
+        """Unimplemented interface."""
+        assert example[1:2:3] == NotImplemented

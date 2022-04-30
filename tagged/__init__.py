@@ -39,16 +39,26 @@ class Tagged(dict):
 
     def __getitem__(self, idx):
         """
-        Get an item or sequence of items.
+        Get an object or sequence of objects.
 
-        Raw indexing: convert key to frozenset and get an item;
+        Raw indexing: convert key to frozenset and get an object;
         if key is not iterable, act like standard dict.
 
-        TODO
+        Tagged[tag:]: return iterable over objects tagged by single tag
+        Tagged[:tags]: return  iterable over objects tagged by all tags
+        Tagged[::tags]: return  iterable over objects tagged by any tag from tags
         """
         match idx:
             case slice(start=start, stop=None, step=None):
                 return (val for key, val in self.items() if start in key)
+            case slice(start=None, stop=stop, step=None):
+                tags = frozenset(stop)
+                return (val for key, val in self.items() if tags.issubset(key))
+            case slice(start=None, stop=None, step=step):
+                tags = frozenset(step)
+                return (val for key, val in self.items() if tags & key)
+            case slice(start=_, stop=_, step=_):
+                return NotImplemented
             case _:
                 if seq := iterable(idx):
                     return super().__getitem__(frozenset(seq))
