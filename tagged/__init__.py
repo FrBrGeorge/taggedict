@@ -2,6 +2,7 @@
 """
 Tagged dict
 """
+_F = frozenset
 
 
 def iterable(obj):
@@ -29,11 +30,11 @@ class Tagged(dict):
 
     def __init__(self, *args, **kwargs):
         if args and hasattr(args[0], "items"):
-            super().__init__({frozenset(key): val for key, val in args[0].items()})
+            super().__init__({_F(key): val for key, val in args[0].items()})
         elif args:
-            super().__init__({frozenset(key): val for key, val in args[0]})
+            super().__init__({_F(key): val for key, val in args[0]})
         elif kwargs:
-            super().__init__({frozenset(key): val for key, val in kwargs.items()})
+            super().__init__({_F(key): val for key, val in kwargs.items()})
         else:
             super().__init__()
 
@@ -52,16 +53,16 @@ class Tagged(dict):
             case slice(start=start, stop=None, step=None):
                 return ((key, val) for key, val in self.items() if start in key)
             case slice(start=None, stop=stop, step=None):
-                tags = frozenset(stop)
+                tags = _F(stop)
                 return ((key, val) for key, val in self.items() if tags.issubset(key))
             case slice(start=None, stop=None, step=step):
-                tags = frozenset(step)
+                tags = _F(step)
                 return ((key, val) for key, val in self.items() if tags & key)
             case slice(start=_, stop=_, step=_):
                 return NotImplemented
             case _:
                 if seq := iterable(idx):
-                    return super().__getitem__(frozenset(seq))
+                    return super().__getitem__(_F(seq))
                 return super().__getitem__(seq)
 
     def _moditem(self, idx, upd, tags, setop, mode):
@@ -73,6 +74,30 @@ class Tagged(dict):
         for key in old:
             del self[key]
         self |= new
+
+    def __delitem__(self, idx):
+        """
+        Delete object or tag(s).
+
+        Raw indexing: convert idx to frozenset and delete an object;
+        if key is not iterable, act like standard dict.
+
+        TODO
+        """
+        match idx:
+            case slice(start=start, stop=None, step=None):
+                self._moditem(idx, {start}, start, _F.__sub__, _F.__contains__)
+            case slice(start=None, stop=stop, step=None):
+                self._moditem(idx, _F(stop), _F(stop), _F.__sub__, _F.issuperset)
+            case slice(start=None, stop=None, step=step):
+                self._moditem(idx, _F(step), _F(step), _F.__sub__, _F.__and__)
+            case slice(start=_, stop=_, step=_):
+                raise KeyError(f"Complex access via {idx} not implemented")
+            case _:
+                if seq := iterable(idx):
+                    super().__delitem__(_F(seq))
+                else:
+                    super().__delitem__(idx)
 
     def __setitem__(self, idx, value):
         """
@@ -90,15 +115,15 @@ class Tagged(dict):
         upd = set(iterable(value) or [value])
         match idx:
             case slice(start=start, stop=None, step=None):
-                self._moditem(idx, upd, start, frozenset.__or__, frozenset.__contains__)
+                self._moditem(idx, upd, start, _F.__or__, _F.__contains__)
             case slice(start=None, stop=stop, step=None):
-                self._moditem(idx, upd, frozenset(stop), frozenset.__or__, frozenset.issuperset)
+                self._moditem(idx, upd, _F(stop), _F.__or__, _F.issuperset)
             case slice(start=None, stop=None, step=step):
-                self._moditem(idx, upd, frozenset(step), frozenset.__or__, frozenset.__and__)
+                self._moditem(idx, upd, _F(step), _F.__or__, _F.__and__)
             case slice(start=_, stop=_, step=_):
                 raise KeyError(f"Complex access via {idx} not implemented")
             case _:
                 if seq := iterable(idx):
-                    super().__setitem__(frozenset(seq), value)
+                    super().__setitem__(_F(seq), value)
                 else:
                     raise KeyError(f"Iterable key expected, got {idx.__class__}")
