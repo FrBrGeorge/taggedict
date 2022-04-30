@@ -23,9 +23,9 @@ def iterable(obj):
 
 class Tagged(dict):
     """
-    Initialize taddeg dictionary.
+    Initialize tagged dictionary.
 
-    Any sequenct ant be provided as key — it will be converted to frozenset
+    Any sequence can be provided as key — it will be converted to frozenset
     """
 
     def __init__(self, *args, **kwargs):
@@ -124,8 +124,8 @@ class Tagged(dict):
         then act like standard dict.
 
         Tagged[tag:] = newtags — add (append tags from) newtags to the objects tagged by tag
-        Tagged[:tags] = newtags — addppend newtags to the objects tagged by all tags
-        Tagged[::tags] = newtags — addpend newtags to the objects tagged by any tag from tags
+        Tagged[:tags] = newtags — append newtags to the objects tagged by all tags
+        Tagged[::tags] = newtags — append newtags to the objects tagged by any tag from tags
 
         If newtags is not iterable, treat it as a single tag sequence
         """
