@@ -64,12 +64,22 @@ class Tagged(dict):
                     return super().__getitem__(frozenset(seq))
                 return super().__getitem__(seq)
 
+    def _moditem(self, idx, upd, tags, setop, mode):
+        """
+        (internal) Modify tags with setop selecting items by mode
+        """
+        new = {setop(key, upd): val for key, val in self[idx] if mode(key, tags)}
+        old = [key for key, val in self[idx]]
+        for key in old:
+            del self[key]
+        self |= new
+
     def __setitem__(self, idx, value):
         """
         Update/set an object or object tag(s).
 
         Raw indexing: convert idx to frozenset if iterable,
-        then, act like standard dict.
+        then act like standard dict.
 
         Tagged[tag:] = newtags — add (append tags from) newtags to the objects tagged by tag
         Tagged[:tags] = newtags — addppend newtags to the objects tagged by all tags
@@ -80,25 +90,11 @@ class Tagged(dict):
         upd = set(iterable(value) or [value])
         match idx:
             case slice(start=start, stop=None, step=None):
-                new = {key | upd: val for key, val in self[idx] if start in key}
-                old = [key for key, val in self[idx]]
-                for key in old:
-                    del self[key]
-                self |= new
+                self._moditem(idx, upd, start, frozenset.__or__, frozenset.__contains__)
             case slice(start=None, stop=stop, step=None):
-                tags = frozenset(stop)
-                new = {key | upd: val for key, val in self[idx] if tags.issubset(key)}
-                old = [key for key, val in self[idx]]
-                for key in old:
-                    del self[key]
-                self |= new
+                self._moditem(idx, upd, frozenset(stop), frozenset.__or__, frozenset.issuperset)
             case slice(start=None, stop=None, step=step):
-                tags = frozenset(step)
-                new = {key | upd: val for key, val in self[idx] if tags & key}
-                old = [key for key, val in self[idx]]
-                for key in old:
-                    del self[key]
-                self |= new
+                self._moditem(idx, upd, frozenset(step), frozenset.__or__, frozenset.__and__)
             case slice(start=_, stop=_, step=_):
                 raise KeyError(f"Complex access via {idx} not implemented")
             case _:
