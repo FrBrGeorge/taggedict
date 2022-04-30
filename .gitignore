@@ -10,3 +10,4 @@ dist
 .doit*
 *.pot
 *.egg-info
+*.swp
