@@ -18,3 +18,11 @@ class TestInit:
         """No raw key in tagged dict."""
         with pytest.raises(KeyError):
             example[1]
+
+    def test_seq(self, example):
+        """Common sequence as key."""
+        assert example["ad"] == 2
+
+    def test_start(self, example):
+        """Tagged[tag:] interface."""
+        assert set(example["a":]) == {2, 3}

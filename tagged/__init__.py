@@ -48,7 +48,7 @@ class Tagged(dict):
         """
         match idx:
             case slice(start=start, stop=None, step=None):
-                return (val for key, val in self if start in key)
+                return (val for key, val in self.items() if start in key)
             case _:
                 if seq := iterable(idx):
                     return super().__getitem__(frozenset(seq))
