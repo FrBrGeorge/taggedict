@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tagged"
+description = "Tags-aware dictionary"
+readme = "README.md"
+keywords = ["dictionary", "tags"]
+license = {text = "MIT License"}
+version = "0.0.1"
+classifiers = [
+        "Development Status :: 3 - Alpha",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python",
+]
+dependencies = [
+]
+
+[tool.setuptools]
+packages = ["tagged"]
