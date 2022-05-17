@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 '''
-Set tagged item/tags.
+Set taggedict item/tags.
 '''
 
 import pytest
-from tagged import Tagged
+from taggedict import Tagged
 
 
 class TestSetitem:

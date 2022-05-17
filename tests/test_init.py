@@ -3,7 +3,7 @@
 
 import sys
 import pytest
-from tagged import Tagged
+from taggedict import Tagged
 
 
 class TestInit:

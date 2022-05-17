@@ -42,6 +42,8 @@ class Tagged(dict):
         """
         Get an object or sequence of objects.
 
+        :param idx: Dictionary key or slice
+
         Raw indexing: convert idx to frozenset and get an object;
         if key is not iterable, act like standard dict.
 
@@ -67,7 +69,7 @@ class Tagged(dict):
 
     def _moditem(self, idx, upd, tags, setop, mode):
         """
-        (internal) Modify tags with setop selecting items by mode
+        (internal) Modify tags with setop selecting items by mode.
         """
         new = {setop(key, upd): val for key, val in self[idx] if mode(key, tags)} if mode else {}
         old = [key for key, val in self[idx]]
@@ -78,6 +80,8 @@ class Tagged(dict):
     def __delitem__(self, idx):
         """
         Delete object(s) or tag(s).
+
+        :param idx: Dictionary key or slice
 
         Raw indexing: convert idx to frozenset and delete an object;
         if key is not iterable, act like standard dict.
@@ -120,14 +124,17 @@ class Tagged(dict):
         """
         Update/set an object or object tag(s).
 
+        :param idx: Dictionary key or slice
+        :param value: Dictionary value or additional tags
+
         Raw indexing: convert idx to frozenset if iterable,
         then act like standard dict.
 
-        Tagged[tag:] = newtags — add (append tags from) newtags to the objects tagged by tag
-        Tagged[:tags] = newtags — append newtags to the objects tagged by all tags
-        Tagged[::tags] = newtags — append newtags to the objects tagged by any tag from tags
+        Tagged[tag:] = newtags — add (append tags from) newtags to the objects tagged by tagi.
+        Tagged[:tags] = newtags — append newtags to the objects tagged by all tags.
+        Tagged[::tags] = newtags — append newtags to the objects tagged by any tag from tags.
 
-        If newtags is not iterable, treat it as a single tag sequence
+        If newtags is not iterable, treat it as a single tag sequence.
         """
         upd = set(iterable(value) or [value])
         match idx:

@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tagged"
+name = "taggedict"
 description = "Tags-aware dictionary"
 readme = "README.md"
 keywords = ["dictionary", "tags"]
@@ -18,4 +18,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["tagged"]
+packages = ["taggedict"]

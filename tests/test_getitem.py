@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Get tagged item(s)."""
+"""Get taggedict item(s)."""
 
 import sys
 import pytest
-from tagged import Tagged
+from taggedict import Tagged
 
 
 class TestGetitem:

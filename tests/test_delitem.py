@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 '''
-Delete tagged item/tags.
+Delete taggedict item/tags.
 '''
 
 import pytest
-from tagged import Tagged
+from taggedict import Tagged
 
 
 class TestDelitem:
