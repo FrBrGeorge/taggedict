@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-Tagged dict
+Tags-aware dictionary.
+
+Dictionary that uses frozenset of tags as actual key and allows indexing by subset or individual tag.
+All standard dict operations inherited from `dict`, but indexing by slice allows some set operations
+and returns an iterator.
 """
 _F = frozenset
 
@@ -29,6 +33,7 @@ class Tagged(dict):
     """
 
     def __init__(self, *args, **kwargs):
+        """Initialize tagged dictionary."""
         if args and hasattr(args[0], "items"):
             super().__init__({_F(key): val for key, val in args[0].items()})
         elif args:
@@ -68,9 +73,7 @@ class Tagged(dict):
                 return super().__getitem__(seq)
 
     def _moditem(self, idx, upd, tags, setop, mode):
-        """
-        (internal) Modify tags with setop selecting items by mode.
-        """
+        """Modify tags with setop selecting items by mode."""
         new = {setop(key, upd): val for key, val in self[idx] if mode(key, tags)} if mode else {}
         old = [key for key, val in self[idx]]
         for key in old:
