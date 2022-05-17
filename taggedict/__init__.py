@@ -49,12 +49,13 @@ class Tagged(dict):
 
         :param idx: Dictionary key or slice
 
-        Raw indexing: convert idx to frozenset and get an object;
-        if key is not iterable, act like standard dict.
+        - Raw indexing: convert ``idx`` to frozenset and get an object;
 
-        Tagged[tag:] — return iterable over items (pairs) tagged by single tag
-        Tagged[:tags] — return iterable over items (pairs) tagged by all tags
-        Tagged[::tags] — return iterable over items (pairs) tagged by any tag from tags
+          - if ``key`` is not iterable, act like standard dict.
+
+        - ``Tagged[tag:]`` — return iterable over items (pairs) tagged by single tag
+        - ``Tagged[:tags]`` — return iterable over items (pairs) tagged by all tags
+        - ``Tagged[::tags]`` — return iterable over items (pairs) tagged by any tag from tags
         """
         match idx:
             case slice(start=start, stop=None, step=None):
@@ -86,17 +87,18 @@ class Tagged(dict):
 
         :param idx: Dictionary key or slice
 
-        Raw indexing: convert idx to frozenset and delete an object;
-        if key is not iterable, act like standard dict.
+        - Raw indexing: convert ``idx`` to frozenset and delete an object;
 
-        del Tagged[tag:] — delete tag from all objects tagged by tag
-        del Tagged[:tags] — delete tags from all objects tagged by all tags
-        del Tagged[::tags] — delete tags from objects tagged by any tag from tags
+          - if ``key`` is not iterable, act like standard dict.
 
-        del Tagged[tag:...] — delete objects tagged by tag
-        del Tagged[...:tags] — delete objects tagged by all tags
-        del Tagged[...::tags] — delete objects tagged by any tag from tags
-        del Tagged[:...:tags] — same
+        - ``del Tagged[tag:]`` — delete tag from all objects tagged by tag
+        - ``del Tagged[:tags]`` — delete tags from all objects tagged by all tags
+        - ``del Tagged[::tags]`` — delete tags from objects tagged by any tag from tags
+
+        - ``del Tagged[tag:...]`` — delete objects tagged by tag
+        - ``del Tagged[...:tags]`` — delete objects tagged by all tags
+        - ``del Tagged[...::tags]`` — delete objects tagged by any tag from tags
+        - ``del Tagged[:...:tags]`` — same
         """
         if type(idx) is slice:
             idx = slice(idx.start if idx.start is not Ellipsis else False,
@@ -130,14 +132,12 @@ class Tagged(dict):
         :param idx: Dictionary key or slice
         :param value: Dictionary value or additional tags
 
-        Raw indexing: convert idx to frozenset if iterable,
-        then act like standard dict.
+        - Raw indexing: convert idx to frozenset if iterable, then act like standard dict.
+        - ``Tagged[tag:] = newtags`` — add (append tags from) ``newtags`` to the objects tagged by tag.
+        - ``Tagged[:tags] = newtags`` — append newtags to the objects tagged by all tags.
+        - ``Tagged[::tags] = newtags`` — append newtags to the objects tagged by any tag from tags.
 
-        Tagged[tag:] = newtags — add (append tags from) newtags to the objects tagged by tagi.
-        Tagged[:tags] = newtags — append newtags to the objects tagged by all tags.
-        Tagged[::tags] = newtags — append newtags to the objects tagged by any tag from tags.
-
-        If newtags is not iterable, treat it as a single tag sequence.
+        If ``newtags`` is not iterable, treat it as a single tag sequence.
         """
         upd = set(iterable(value) or [value])
         match idx:
