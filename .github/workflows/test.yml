@@ -23,7 +23,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest pydocstyle
+        pip install pipenv
+        pipenv lock -r --dev-only > devreq.txt
+        pip install -r devreq.txt
     - name: Lint with flake8
       run: |
         flake8 taggedict --count --select=E9,F63,F7,F82 --show-source --statistics
