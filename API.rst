@@ -1,6 +1,8 @@
 taggedict package
 =================
 
+Technical documentation.
+
 Module contents
 ---------------
 
