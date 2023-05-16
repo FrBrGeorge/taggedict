@@ -18,8 +18,7 @@ style:
 	pydocstyle $(MODULE)
 
 package:
-	python3 -m build
-
+	python -m build
 
 check:
 	python -m pytest $(TESTFLAGS)

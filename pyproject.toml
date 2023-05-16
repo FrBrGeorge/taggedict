@@ -1,21 +1,27 @@
 [build-system]
-requires = ["setuptools", "toml"]
+requires = ["setuptools", "build"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "taggedict"
 description = "Tags-aware dictionary"
 readme = "README.md"
-keywords = ["dictionary", "tags"]
-license = {text = "MIT License"}
+keywords = ["dict", "tags"]
+license = {file = "LICENSE"}
 version = "0.0.1"
+authors = [{ name = "Fr. Br. George", email = "george@altlinux.org" }]
 classifiers = [
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
 ]
+requires-python = ">=3.10"
 dependencies = [
 ]
+
+[project.urls]
+repository = "https://github.com/FrBrGeorge/taggedict"
+documentation = "https://readthedocs.org"
 
 [tool.setuptools]
 packages = ["taggedict"]
