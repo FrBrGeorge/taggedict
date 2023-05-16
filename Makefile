@@ -20,6 +20,9 @@ style:
 package:
 	python -m build
 
+publish:	clean package
+	python3 -m twine upload --repository testpypi dist/*
+
 check:
 	python -m pytest $(TESTFLAGS)
 
@@ -27,6 +30,7 @@ coverage:
 	$(MAKE) TESTFLAGS="$(TESTFLAGS) $(COVERFLAGS)" check
 
 clean:
+	rm -rf dist
 
 gitclean:	clean
 	git clean -fdx
