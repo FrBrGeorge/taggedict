@@ -7,11 +7,10 @@ name = "taggedict"
 description = "Tags-aware dictionary"
 readme = "README.md"
 keywords = ["dict", "tags"]
-license = {file = "LICENSE"}
+license = "MIT"
 authors = [{ name = "Fr. Br. George", email = "george@altlinux.org" }]
 classifiers = [
         "Development Status :: 3 - Alpha",
-        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
 ]
 requires-python = ">=3.10"
