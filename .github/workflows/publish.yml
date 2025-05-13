@@ -1,0 +1,35 @@
+# publish
+name: Release and wheel upload
+run-name: ${{ github.actor }} creating a release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: python -m pip install --upgrade pip setuptools build wheel
+    - name: Build packages
+      run: python -m build
+    - name: Upload bdist and sdist
+      uses: actions/upload-artifact@v4
+      with:
+        name: Distros
+        path: dist/*
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "dist/*"
+        draft: true
