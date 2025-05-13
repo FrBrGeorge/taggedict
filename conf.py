@@ -12,6 +12,7 @@
 #
 import os
 import sys
+from setuptools_git_versioning import version_from_git
 sys.path.insert(0, os.path.abspath('.'))
 
 
@@ -22,7 +23,7 @@ copyright = '2022, Fr. Br. George'
 author = 'Fr. Br. George'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = version_from_git()
 
 
 # -- General configuration ---------------------------------------------------
@@ -53,4 +54,4 @@ html_theme = 'classic'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']

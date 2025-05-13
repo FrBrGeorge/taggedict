@@ -3,6 +3,10 @@ version: 2
 sphinx:
   configuration: conf.py
 
+python:
+  install:
+    - requirements: readthedocs.req.txt
+
 build:
   os: ubuntu-22.04
   tools:
