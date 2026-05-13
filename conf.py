@@ -23,7 +23,7 @@ copyright = '2022, Fr. Br. George'
 author = 'Fr. Br. George'
 
 # The full version, including alpha/beta/rc tags
-release = version_from_git()
+release = f"{version_from_git()}"
 
 
 # -- General configuration ---------------------------------------------------

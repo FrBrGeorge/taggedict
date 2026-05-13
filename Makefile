@@ -12,6 +12,7 @@ TESTFLAGS = -v
 COVERFLAGS = --cov=$(MODULE) --cov-report=html --cov-report=term
 
 all:	check style package
+	@echo all
 
 style:
 	flake8 $(MODULE)
